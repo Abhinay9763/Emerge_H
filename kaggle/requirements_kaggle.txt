@@ -1,0 +1,7 @@
+pyyaml>=6.0
+opencv-python>=4.8.0
+numpy>=1.24.0
+pandas>=2.0.0
+tqdm>=4.66.0
+rapidfuzz>=3.9.0
+visualdl>=2.5.3

@@ -1,0 +1,100 @@
+Global:
+  use_gpu: true
+  epoch_num: 80
+  log_smooth_window: 20
+  print_batch_step: 20
+  save_model_dir: ./models/te_ppocrv3
+  save_epoch_step: 5
+  eval_batch_step: [0, 400]
+  cal_metric_during_train: true
+  pretrained_model:
+  checkpoints:
+  save_inference_dir: ./models/te_ppocrv3/inference
+  use_visualdl: true
+  infer_mode: false
+  infer_img: ./data/raw/sample.jpg
+  character_dict_path: ./configs/rec/te/te_char_dict.txt
+  max_text_length: 64
+  use_space_char: true
+
+Optimizer:
+  name: Adam
+  beta1: 0.9
+  beta2: 0.999
+  lr:
+    name: Cosine
+    learning_rate: 0.001
+    warmup_epoch: 2
+  regularizer:
+    name: L2
+    factor: 0.00001
+
+Architecture:
+  model_type: rec
+  algorithm: SVTR_LCNet
+  Transform:
+  Backbone:
+    name: MobileNetV1Enhance
+    scale: 0.5
+  Neck:
+    name: SequenceEncoder
+    encoder_type: svtr
+    dims: 64
+    depth: 2
+    hidden_dims: 120
+    use_guide: true
+  Head:
+    name: CTCHead
+    fc_decay: 0.00001
+
+Loss:
+  name: CTCLoss
+
+PostProcess:
+  name: CTCLabelDecode
+
+Metric:
+  name: RecMetric
+  main_indicator: acc
+
+Train:
+  dataset:
+    name: SimpleDataSet
+    data_dir: ./
+    label_file_list:
+      - ./data/lists/train.txt
+    transforms:
+      - DecodeImage:
+          img_mode: BGR
+          channel_first: false
+      - CTCLabelEncode:
+      - RecResizeImg:
+          image_shape: [3, 48, 320]
+      - KeepKeys:
+          keep_keys: [image, label, length]
+  loader:
+    shuffle: true
+    drop_last: true
+    batch_size_per_card: 64
+    num_workers: 4
+
+Eval:
+  dataset:
+    name: SimpleDataSet
+    data_dir: ./
+    label_file_list:
+      - ./data/lists/val.txt
+    transforms:
+      - DecodeImage:
+          img_mode: BGR
+          channel_first: false
+      - CTCLabelEncode:
+      - RecResizeImg:
+          image_shape: [3, 48, 320]
+      - KeepKeys:
+          keep_keys: [image, label, length]
+  loader:
+    shuffle: false
+    drop_last: false
+    batch_size_per_card: 64
+    num_workers: 4

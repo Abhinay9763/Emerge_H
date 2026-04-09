@@ -1,0 +1,3 @@
+# One character per line.
+# Generate from training labels using scripts/build_te_char_dict.py
+# Replace this file with generated output before training.
