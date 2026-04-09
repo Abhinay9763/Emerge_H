@@ -1,0 +1,45 @@
+# Python environments
+.venv/
+.venv312/
+venv/
+
+# Python cache/build
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# VS Code / editor
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Local databases and runtime files
+*.db
+*.sqlite
+*.sqlite3
+Backend/transcriptions.db
+Backend/uploads/
+
+# ML data and large artifacts
+ML/data/IIIT-HW-Telugu_v1/
+ML/data/*.tar.gz
+ML/data/**/*.tar.gz
+ML/training/PaddleOCR/
+ML/training/artifacts/
+ML/training/labels/
+ML/evaluation/reports/
+
+# Logs
+*.log
+
+# Optional: keep generated manifests out of git if regenerated locally
+ML/data/manifests/cvit_train.jsonl
+ML/data/manifests/cvit_val.jsonl
+ML/data/manifests/cvit_test.jsonl

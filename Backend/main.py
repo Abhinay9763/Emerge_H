@@ -51,14 +51,12 @@ async def lifespan(app: FastAPI):
     UPLOADS_DIR.mkdir(parents=True, exist_ok=True)
 
     try:
-        try:
-            from .pipeline import predict_page as pipeline_predict_page
-        except ImportError:
-            from pipeline import predict_page as pipeline_predict_page
+        from ML.inference.predict import predict_page as pipeline_predict_page
 
         predict_page = pipeline_predict_page
         app.state.pipeline_loaded = True
-    except ImportError:
+    except Exception as exc:
+        logger.warning("ML pipeline not loaded, using mock predictor: %s", exc)
         predict_page = _mock_predict_page
         app.state.pipeline_loaded = False
 
